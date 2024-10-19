@@ -199,3 +199,28 @@ main {
   background-color: #3498db;
   color: white;
 }
+
+#filters {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+#search-bar {
+  border: none;
+  padding: 0.5rem;
+  border-radius: 10px;
+  max-width: 250px;
+}
+
+#genre-filter {
+  border: none;
+  padding: 0.5rem;
+  border-radius: 10px;
+  max-width: 250px;
+}
+
+#genre-filter select {
+  font-family: "poppins";
+}

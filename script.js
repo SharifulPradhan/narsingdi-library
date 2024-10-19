@@ -12,11 +12,56 @@ async function fetchBooks(page = 1) {
     const response = await fetch(`${apiUrl}?page=${page}`);
     const data = await response.json();
     books = data.results;
-    displayBooks(books);
+    genres = extractGenres(books);  // Extract genres from fetched books
+    applyFilters();  // Display books based on search and genre filter
     setupPagination(data.count, page);
+    populateGenreFilter(genres);
   } catch (error) {
     console.error('Error fetching books:', error);
   }
+}
+
+// Extract genres from books
+function extractGenres(books) {
+  const allGenres = new Set();
+  books.forEach(book => {
+      if (book.subjects) {
+          book.subjects.forEach(subject => allGenres.add(subject));
+      }
+  });
+  return Array.from(allGenres);
+}
+
+// Populate the genre filter dropdown
+function populateGenreFilter(genres) {
+  const genreFilter = document.getElementById('genre-filter');
+  genres.forEach(genre => {
+      const option = document.createElement('option');
+      option.value = genre;
+      option.textContent = genre;
+      genreFilter.appendChild(option);
+  });
+}
+
+// Apply search and genre filters to books
+function applyFilters() {
+  let filteredBooks = books;
+
+  // Apply search filter
+  if (searchQuery) {
+      filteredBooks = filteredBooks.filter(book => 
+          book.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+  }
+
+  // Apply genre filter
+  if (selectedGenre) {
+      filteredBooks = filteredBooks.filter(book => 
+          book.subjects && book.subjects.some(subject => subject.toLowerCase() === selectedGenre.toLowerCase())
+      );
+  }
+
+  displayBooks(filteredBooks);
 }
 
 function displayBooks(books) {
@@ -47,28 +92,28 @@ function setupPagination(totalItems, currentPage) {
   let endPage = Math.min(totalPages, currentPage + 2);
 
   if (currentPage > 1) {
-      const prevBtn = document.createElement('button');
-      prevBtn.innerText = 'Previous';
-      prevBtn.classList.add('page-btn');
-      prevBtn.addEventListener('click', () => fetchBooks(currentPage - 1));
-      paginationContainer.appendChild(prevBtn);
+    const prevBtn = document.createElement('button');
+    prevBtn.innerText = 'Previous';
+    prevBtn.classList.add('page-btn');
+    prevBtn.addEventListener('click', () => fetchBooks(currentPage - 1));
+    paginationContainer.appendChild(prevBtn);
   }
 
   for (let i = startPage; i <= endPage; i++) {
-      const pageBtn = document.createElement('button');
-      pageBtn.innerText = i;
-      pageBtn.classList.add('page-btn');
-      if (i === currentPage) pageBtn.classList.add('active');
-      pageBtn.addEventListener('click', () => fetchBooks(i));
-      paginationContainer.appendChild(pageBtn);
+    const pageBtn = document.createElement('button');
+    pageBtn.innerText = i;
+    pageBtn.classList.add('page-btn');
+    if (i === currentPage) pageBtn.classList.add('active');
+    pageBtn.addEventListener('click', () => fetchBooks(i));
+    paginationContainer.appendChild(pageBtn);
   }
 
   if (currentPage < totalPages) {
-      const nextBtn = document.createElement('button');
-      nextBtn.innerText = 'Next';
-      nextBtn.classList.add('page-btn');
-      nextBtn.addEventListener('click', () => fetchBooks(currentPage + 1));
-      paginationContainer.appendChild(nextBtn);
+    const nextBtn = document.createElement('button');
+    nextBtn.innerText = 'Next';
+    nextBtn.classList.add('page-btn');
+    nextBtn.addEventListener('click', () => fetchBooks(currentPage + 1));
+    paginationContainer.appendChild(nextBtn);
   }
 }
 
@@ -116,8 +161,14 @@ function displayWishlistBooks() {
 
 function loadHomePage() {
   mainContent.innerHTML = `
-      <div id="book-list"></div>
-      <div id="pagination"></div>
+      <div id="filters">
+            <input type="text" id="search-bar" placeholder="Search by title...">
+            <select id="genre-filter">
+                <option value="">All Genres</option>
+            </select>
+        </div>
+        <div id="book-list"></div>
+        <div id="pagination"></div>
   `;
   fetchBooks();
 }
@@ -145,6 +196,23 @@ document.body.addEventListener('click', (e) => {
   if (e.target.classList.contains('wishlist-btn')) {
     const bookId = parseInt(e.target.getAttribute('data-id'));
     toggleWishlist(bookId);
+  }
+});
+
+// Event listener for search input
+document.body.addEventListener('input', (e) => {
+  if (e.target.id === 'search-bar') {
+      searchQuery = e.target.value.toLowerCase();
+      console.log("searchQuery", searchQuery);  // Debugging
+      applyFilters();
+  }
+});
+
+// Event listener for genre filter
+document.addEventListener('change', (e) => {
+  if (e.target.id === 'genre-filter') {
+    selectedGenre = e.target.value;
+    applyFilters();
   }
 });
 
