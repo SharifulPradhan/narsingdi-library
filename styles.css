@@ -1,3 +1,4 @@
+/* main styles */
 :root {
   --primary-bg: #4f6f52;
   --primary-text: #fff;
@@ -21,6 +22,9 @@ header {
   background-color: var(--primary-bg);
   color: var(--primary-text);
   padding: 10px 0;
+  position: fixed;
+  width: 100%;
+  z-index: 999;
 }
 
 .navbar {
@@ -63,7 +67,48 @@ footer {
   color: var(--primary-text);;
   text-align: center;
   padding: 10px;
-  position: fixed;
-  width: 100%;
-  bottom: 0;
+}
+
+main {
+  padding-top: 5rem;
+  max-width: 1200px;
+  min-width: 100%;
+}
+
+/* Book List Styles */
+#book-list, #wishlist-books {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.book {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.book:hover {
+  cursor: pointer;
+  transform: translateY(-5px);
+}
+
+.book img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.book h3 {
+  font-size: 18px;
+  margin: 10px 0;
+  color: #65451f;
+  white-space: nowrap; 
+  width: 100%; 
+  overflow: hidden;
+  text-overflow: ellipsis; 
 }
