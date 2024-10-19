@@ -6,8 +6,20 @@ let genres = [];  // Store available genres globally
 let searchQuery = '';  // Store the current search query
 let selectedGenre = '';  // Store the selected genre
 
+
+// loader 
+function showLoader() {
+  loader.style.display = "block";
+}
+
+// hide the loader
+function hideLoader() {
+  loader.style.display = "none";
+}
+
 // Fetch books
 async function fetchBooks(page = 1) {
+  showLoader();
   try {
     const response = await fetch(`${apiUrl}?page=${page}`);
     const data = await response.json();
@@ -18,6 +30,8 @@ async function fetchBooks(page = 1) {
     populateGenreFilter(genres);
   } catch (error) {
     console.error('Error fetching books:', error);
+  } finally {
+    hideLoader();
   }
 }
 
