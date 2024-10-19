@@ -4,12 +4,11 @@
   --primary-text: #fff;
 }
 
-
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
@@ -52,7 +51,7 @@ header {
 }
 
 .nav-link {
-  color: var(--primary-text);;
+  color: var(--primary-text);
   text-decoration: none;
   font-size: 18px;
   transition: color 0.3s;
@@ -64,7 +63,7 @@ header {
 
 footer {
   background-color: var(--primary-bg);
-  color: var(--primary-text);;
+  color: var(--primary-text);
   text-align: center;
   padding: 10px;
 }
@@ -73,10 +72,12 @@ main {
   padding-top: 5rem;
   max-width: 1200px;
   min-width: 100%;
+  min-height: 100vh;
 }
 
 /* Book List Styles */
-#book-list, #wishlist-books {
+#book-list,
+#wishlist-books {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
@@ -84,10 +85,11 @@ main {
 }
 
 .book {
+  position: relative;
   background-color: white;
   border-radius: 10px;
+  padding: 0rem 0.5rem 1rem 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 15px;
   text-align: center;
   transition: transform 0.3s;
 }
@@ -101,14 +103,64 @@ main {
   max-width: 100%;
   height: auto;
   border-radius: 10px;
+  min-height: 300px;
 }
 
 .book h3 {
   font-size: 18px;
   margin: 10px 0;
   color: #65451f;
-  white-space: nowrap; 
-  width: 100%; 
+  white-space: nowrap;
+  width: 100%;
   overflow: hidden;
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis;
+}
+
+.book>.author {
+  text-align: left;
+  width: 100%;
+  font-size: 12px;
+  margin: 0;
+}
+
+.book>.genre {
+  text-align: left;
+  width: 100%;
+  font-size: 12px;
+  margin: 0;
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* wishlist styles */
+.book-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #EAC696;
+  margin-bottom: 0.5rem;
+  padding-top: 0.3rem;
+}
+.book-header p {
+  font-size: 12px;
+  font-weight: bold;
+  color: #724d1c;
+}
+.wishlist-btn {
+  border: none;
+  background-color: transparent;
+  font-size: 24px;
+  cursor: pointer;
+  color: #ddd;
+  transition: color 0.3s;
+}
+
+.wishlist-btn.wishlisted {
+  color: #e74c3c;
+}
+
+.wishlist-btn:hover {
+  color: #e74c3c;
 }
