@@ -27,6 +27,8 @@ header {
 }
 
 .navbar {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -71,8 +73,10 @@ footer {
 main {
   padding-top: 5rem;
   max-width: 1200px;
-  min-width: 100%;
   min-height: 100vh;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 /* Book List Styles */
@@ -163,4 +167,35 @@ main {
 
 .wishlist-btn:hover {
   color: #e74c3c;
+}
+
+/* Pagination Styles */
+#pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.page-btn {
+  border: 1px solid #ccc;
+  background-color: white;
+  padding: 10px 15px;
+  margin: 0 3px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 16px;
+}
+
+.page-btn.active {
+  background-color: #3498db;
+  color: white;
+}
+
+.page-btn:hover {
+  background-color: #3498db;
+  color: white;
 }

@@ -8,12 +8,12 @@ let selectedGenre = '';  // Store the selected genre
 
 // Fetch books
 async function fetchBooks(page = 1) {
-  console.log('calling')
   try {
     const response = await fetch(`${apiUrl}?page=${page}`);
     const data = await response.json();
     books = data.results;
-    displayBooks(books)
+    displayBooks(books);
+    setupPagination(data.count, page);
   } catch (error) {
     console.error('Error fetching books:', error);
   }
@@ -35,6 +35,41 @@ function displayBooks(books) {
       </div>
   `).join('');
   document.getElementById('book-list').innerHTML = bookList;
+}
+
+// Pagination setup
+function setupPagination(totalItems, currentPage) {
+  const totalPages = Math.ceil(totalItems / 32);
+  const paginationContainer = document.getElementById('pagination');
+  paginationContainer.innerHTML = '';
+
+  let startPage = Math.max(1, currentPage - 2);
+  let endPage = Math.min(totalPages, currentPage + 2);
+
+  if (currentPage > 1) {
+      const prevBtn = document.createElement('button');
+      prevBtn.innerText = 'Previous';
+      prevBtn.classList.add('page-btn');
+      prevBtn.addEventListener('click', () => fetchBooks(currentPage - 1));
+      paginationContainer.appendChild(prevBtn);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+      const pageBtn = document.createElement('button');
+      pageBtn.innerText = i;
+      pageBtn.classList.add('page-btn');
+      if (i === currentPage) pageBtn.classList.add('active');
+      pageBtn.addEventListener('click', () => fetchBooks(i));
+      paginationContainer.appendChild(pageBtn);
+  }
+
+  if (currentPage < totalPages) {
+      const nextBtn = document.createElement('button');
+      nextBtn.innerText = 'Next';
+      nextBtn.classList.add('page-btn');
+      nextBtn.addEventListener('click', () => fetchBooks(currentPage + 1));
+      paginationContainer.appendChild(nextBtn);
+  }
 }
 
 // Wishlist functionality
@@ -88,7 +123,7 @@ function loadHomePage() {
 }
 
 function loadWishlistPage() {
-  mainContent.innerHTML = '<h2>Wishlist</h2><div id="wishlist-books"></div>';
+  mainContent.innerHTML = '<h2 class="wishlist-heading">Wishlist</h2><div id="wishlist-books"></div>';
   displayWishlistBooks();  // Display wishlist books
 }
 
