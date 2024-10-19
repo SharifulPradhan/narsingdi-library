@@ -39,9 +39,9 @@ async function fetchBooks(page = 1) {
 function extractGenres(books) {
   const allGenres = new Set();
   books.forEach(book => {
-      if (book.subjects) {
-          book.subjects.forEach(subject => allGenres.add(subject));
-      }
+    if (book.subjects) {
+      book.subjects.forEach(subject => allGenres.add(subject));
+    }
   });
   return Array.from(allGenres);
 }
@@ -50,10 +50,10 @@ function extractGenres(books) {
 function populateGenreFilter(genres) {
   const genreFilter = document.getElementById('genre-filter');
   genres.forEach(genre => {
-      const option = document.createElement('option');
-      option.value = genre;
-      option.textContent = genre;
-      genreFilter.appendChild(option);
+    const option = document.createElement('option');
+    option.value = genre;
+    option.textContent = genre;
+    genreFilter.appendChild(option);
   });
 }
 
@@ -63,16 +63,16 @@ function applyFilters() {
 
   // Apply search filter
   if (searchQuery) {
-      filteredBooks = filteredBooks.filter(book => 
-          book.title.toLowerCase().includes(searchQuery.toLowerCase())
-      );
+    filteredBooks = filteredBooks.filter(book =>
+      book.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
   }
 
   // Apply genre filter
   if (selectedGenre) {
-      filteredBooks = filteredBooks.filter(book => 
-          book.subjects && book.subjects.some(subject => subject.toLowerCase() === selectedGenre.toLowerCase())
-      );
+    filteredBooks = filteredBooks.filter(book =>
+      book.subjects && book.subjects.some(subject => subject.toLowerCase() === selectedGenre.toLowerCase())
+    );
   }
 
   displayBooks(filteredBooks);
@@ -80,7 +80,7 @@ function applyFilters() {
 
 function displayBooks(books) {
   const bookList = books.map(book => `
-      <div class="book">
+      <div class="book" data-id="${book.id}">
           <div class="book-header">
           <p>ID: ${book.id} <p>
           <button class="wishlist-btn" data-id="${book.id}">
@@ -94,6 +94,41 @@ function displayBooks(books) {
       </div>
   `).join('');
   document.getElementById('book-list').innerHTML = bookList;
+}
+
+// fetch individual book details
+async function fetchBookDetails(bookId) {
+  showLoader();
+  try {
+    const response = await fetch(`${apiUrl}${bookId}`);
+    const book = await response.json();
+    displayBookDetails(book);
+  } catch (error) {
+    console.error('Error fetching book details:', error);
+  } finally {
+    hideLoader()
+  }
+}
+
+// Display single book details page
+function displayBookDetails(book) {
+  mainContent.innerHTML = `
+  <div class="book-details">
+            <h2>${book.title}</h2>
+            <img src="${book.formats['image/jpeg'] || 'https://via.placeholder.com/150'}" alt="${book.title} cover" />
+
+            <div class="details-container">
+              <p><strong>Author:</strong> ${book.authors.map(author => author.name).join(', ')}</p>
+            
+              <p><strong>Download Count:</strong> ${book.download_count}</p>
+              <p><strong>Subjects:</strong> ${book.subjects.join(', ')}</p>
+            </div>
+            <button id="back-to-home">Back to Home</button>
+        </div>
+    `;
+
+  // Add event listener to return to home page
+  document.getElementById('back-to-home').addEventListener('click', loadHomePage);
 }
 
 // Pagination setup
@@ -216,9 +251,8 @@ document.body.addEventListener('click', (e) => {
 // Event listener for search input
 document.body.addEventListener('input', (e) => {
   if (e.target.id === 'search-bar') {
-      searchQuery = e.target.value.toLowerCase();
-      console.log("searchQuery", searchQuery);  // Debugging
-      applyFilters();
+    searchQuery = e.target.value.toLowerCase();
+    applyFilters();
   }
 });
 
@@ -227,6 +261,17 @@ document.addEventListener('change', (e) => {
   if (e.target.id === 'genre-filter') {
     selectedGenre = e.target.value;
     applyFilters();
+  }
+});
+
+// Event listener for book details
+document.body.addEventListener('click', (e) => {
+  const bookElement = e.target.closest('.book');
+  if (bookElement) {
+      const bookId = bookElement.getAttribute('data-id');
+      if (bookId) {
+          fetchBookDetails(bookId);
+      }
   }
 });
 
