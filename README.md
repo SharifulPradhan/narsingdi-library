@@ -7,6 +7,7 @@ This is a **Narsingdi Library** web application that allows users to explore a l
 - **Book List**: Displays a paginated list of books fetched from the API.
 - **Wishlist**: Users can add or remove books from their wishlist, which is stored in the browser's `localStorage`.
 - **Book Details**: Each book shows a title, author(s), and cover image.
+- **Book Details Page**: There are individual pages for each books.
 - **Search and Filter**: A search bar allows filtering of books by title (to be implemented).
 - **Pagination**: Users can navigate through pages of books.
 - **Responsive Design**: The app is fully responsive and works well on both desktop and mobile devices.
@@ -35,4 +36,4 @@ Follow the instructions below to set up the project on your local machine.
    
    If you have Git installed, clone the repository by running:
    ```bash
-   git clone https://github.com/your-username/book-store.git
+   git clone https://github.com/SharifulPradhan/narsingdi-library.git
