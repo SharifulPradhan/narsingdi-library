@@ -113,7 +113,7 @@ async function fetchBookDetails(bookId) {
 // Display single book details page
 function displayBookDetails(book) {
   mainContent.innerHTML = `
-  <div class="book-details">
+        <div class="book-details">
             <img src="${book.formats['image/jpeg'] || 'https://via.placeholder.com/150'}" alt="${book.title} cover" />
             
             <div class="details-container">
@@ -194,7 +194,7 @@ function toggleWishlist(bookId) {
 function displayWishlistBooks() {
   const wishlistBooks = books.filter(book => wishlist.includes(book.id));
   const bookList = wishlistBooks.map(book => `
-      <div class="book">
+      <div class="book" data-id="${book.id}">
           <div class="book-header">
           <p>ID: ${book.id} <p>
           <button class="wishlist-btn" data-id="${book.id}">
