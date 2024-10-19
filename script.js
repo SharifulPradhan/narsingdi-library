@@ -114,16 +114,19 @@ async function fetchBookDetails(bookId) {
 function displayBookDetails(book) {
   mainContent.innerHTML = `
   <div class="book-details">
-            <h2>${book.title}</h2>
             <img src="${book.formats['image/jpeg'] || 'https://via.placeholder.com/150'}" alt="${book.title} cover" />
-
-            <div class="details-container">
-              <p><strong>Author:</strong> ${book.authors.map(author => author.name).join(', ')}</p>
             
-              <p><strong>Download Count:</strong> ${book.download_count}</p>
-              <p><strong>Subjects:</strong> ${book.subjects.join(', ')}</p>
+            <div class="details-container">
+              <h1>${book.title}</h1>
+              
+              <div>
+                <p><strong>Author:</strong> ${book.authors.map(author => author.name).join(', ')}</p>
+              
+                <p><strong>Download Count:</strong> ${book.download_count}</p>
+                <p class="subject"><strong>Subjects:</strong> ${book.subjects.join(', ')}</p>
+                <button id="back-to-home">Back to Home</button>
+              </div>
             </div>
-            <button id="back-to-home">Back to Home</button>
         </div>
     `;
 
